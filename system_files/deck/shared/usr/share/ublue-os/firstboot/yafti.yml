@@ -23,7 +23,7 @@ screens:
           packages:
           - Set input group: sudo -A ujust add-user-to-input-group
         Add Nested Desktop to Steam:
-          description: Adds a nested desktop environment to Steam gamemode.
+          description: Adds a nested desktop environment to Steam game mode.
           default: true
           packages:
           - Add to steam: ujust add-nested-desktop-to-steam
@@ -43,24 +43,34 @@ screens:
           default: false
           packages:
           - Retrieve EmuDeck: ujust get-emudeck
+        Sunshine:
+          description: A self-hosted game stream host for Moonlight
+          default: false
+          packages:
+          - Install Sunshine: ujust install-sunshine
+          - Autostart Sunshine: ujust autostart-sunshine
         Hide GRUB Menu:
           description: |
             NOTE: Press the escape key before boot to show the menu
           default: true
           packages:
           - Hide GRUB: sudo -A ujust hide-grub
+        Install Game Mode Startup Video:
+          description: Adds a Bazzite themed startup video for Steam's game mode.
+          default: true
+          packages:
+          - Install Video: ujust install-gamemode-video
+        Fix Steam Download Speed:
+          description: Adds a config file that fixes download speed under Steam for Linux.
+          default: true
+          packages:
+          - Fix Download Speed: ujust fix-steam-download-speed
         Legacy Memory Configuration (Not recommended):
           description: Disable ZRAM and enable adjustable swap file, defaults to 1GB.
           default: false
           packages:
           - Deck Swap: ujust deckswap-on
           - Disable ZRAM: ujust zram-off
-        Nix Package Manager:
-          description: Nix is a powerful package manager for Linux and other Unix systems that makes package management reliable and reproducible
-          default: false
-          packages:
-          - Install Nix Package Support: sudo -A ujust setup-nix install
-          - Install Fleek (Requires Nix): ujust setup-fleek install
         Oversteer:
           description: Application to control supported steering wheels
           default: false
@@ -146,6 +156,7 @@ screens:
           - Mumble: info.mumble.Mumble
           - OpenMW: org.openmw.OpenMW
           - osu: sh.ppy.osu
+          - Parsec: com.parsecgaming.parsec
           - Space Cadet Pinball: com.github.k4zmu2a.spacecadetpinball
           - Sonic Robo Blast 2: org.srb2.SRB2
           - Sonic Robo Blast 2 Kart: org.srb2.SRB2Kart
@@ -176,6 +187,7 @@ screens:
           - Ryujinx: org.ryujinx.Ryujinx
           - ScummVM: org.scummvm.ScummVM
           - Snes9x: com.snes9x.Snes9x
+          - Stella: io.github.stella_emu.Stella
           - xemu: app.xemu.xemu
           - yuzu: org.yuzu_emu.yuzu
         Streaming:
@@ -207,6 +219,7 @@ screens:
           - LibreOffice: org.libreoffice.LibreOffice
           - Obsidian: md.obsidian.Obsidian
           - OnlyOffice: org.onlyoffice.desktopeditors
+          - Planify: io.github.alainm23.planify
           - Slack: com.slack.Slack
           - Standard Notes: org.standardnotes.standardnotes
           - Tenacity: org.tenacityaudio.Tenacity
@@ -221,6 +234,7 @@ screens:
           - Bitwarden: com.bitwarden.desktop
           - Calibre: com.calibre_ebook.calibre
           - Fedora Media Writer: org.fedoraproject.MediaWriter
+          - Gradience: com.github.GradienceTeam.Gradience
           - KeePassXC: org.keepassxc.KeePassXC
           - Metadata Cleaner: fr.romainvigier.MetadataCleaner
           - OpenRGB: org.openrgb.OpenRGB
@@ -231,19 +245,6 @@ screens:
           - SaveDesktop: io.github.vikdevelop.SaveDesktop
           - Syncthing: com.github.zocker_160.SyncThingy
           - VLC: org.videolan.VLC
-  theme:
-    source: yafti.screen.title
-    values:
-      title: "GNOME Theme"
-      condition:
-        run: grep -q 'silverblue' <<< $(jq -r '."base-image-name"' < /usr/share/ublue-os/image-info.json)
-      links:
-      - "Vapor Theme":
-          run: ujust enable-vapor-theme
-      - "VGUI2 Theme":
-          run: ujust enable-vgui2-theme
-      description: |
-        Optionally apply a Valve-inspired theme to GNOME via Gradience. Note that custom themes are not officially supported by GNOME and some applications can break. Please avoid reporting issues to application developers until you've tested against the default theme.
   final-screen:
     source: yafti.screen.title
     values:
@@ -252,6 +253,8 @@ screens:
       links:
       - "Install More Applications":
           run: /usr/bin/plasma-discover
+      - "Documentation":
+          run: /usr/bin/xdg-open https://universal-blue.discourse.group/docs?category=5
       - "Forums":
           run: /usr/bin/xdg-open https://universal-blue.discourse.group/c/bazzite/5
       - "Join the Discord Community":

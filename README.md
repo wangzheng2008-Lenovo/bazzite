@@ -15,7 +15,9 @@
 - [Showcase](https://github.com/ublue-os/bazzite#showcase)
 - [Documentation & Newsletters](https://github.com/ublue-os/bazzite#documentation--newsletters)
 - [Custom Packages](https://github.com/ublue-os/bazzite#custom-packages)
-- [Verification & Metrics](https://github.com/ublue-os/bazzite#verification)
+- [Image Verification](https://github.com/ublue-os/bazzite#verification)
+- [Secure Boot](https://github.com/ublue-os/bazzite#secure-boot)
+- [Metrics](https://github.com/ublue-os/bazzite#contributor-metrics)
 - [Special Thanks](https://github.com/ublue-os/bazzite#special-thanks)
 - [Building Your Own](https://github.com/ublue-os/bazzite#build-your-own)
 - [Community](https://github.com/ublue-os/bazzite#join-the-community)
@@ -27,17 +29,22 @@ Bazzite is an OCI image that serves as an alternative operating system for the [
 
 Bazzite is built from [ublue-os/main](https://github.com/ublue-os/main) and [ublue-os/nvidia](https://github.com/ublue-os/nvidia) using [Fedora](https://fedoraproject.org/) technology, which means expanded hardware support and built in drivers are included. Additionally, Bazzite adds the following features:
 
+- Uses the [fsync kernel](https://copr.fedorainfracloud.org/coprs/sentry/kernel-fsync/) to achieve HDR and expanded hardware support, among numerous other included patches.
+- HDR available in Gamescope Session.
 - Proprietary Nvidia drivers pre-installed.
+- NVK available on non-Nvidia builds.
 - Full hardware accelerated codec support for H264 decoding.
 - Full support for AMD's ROCM OpenCL/HIP run-times.
-- [xone](https://github.com/medusalix/xone), [xpadneo](https://github.com/atar-axis/xpadneo), and [xpad-noone](https://github.com/ublue-os/xpad-noone) drivers for Xbox controllers.
+- [xone](https://github.com/medusalix/xone), [xpadneo](https://github.com/atar-axis/xpadneo), and [xpad-noone](https://github.com/ublue-os/xpad-noone) drivers for Xbox controllers. <sub><sup>(Enable with `ujust configure-gamepads`)</sup></sub>
 - Full support for [DisplayLink](https://www.synaptics.com/products/displaylink-graphics).
 - Includes Valve's KDE themes from SteamOS.
+- Features optional Valve-inspired GTK3/4 themes matching Vapor and VGUI2 from SteamOS. Install [Gradience](https://flathub.org/apps/com.github.GradienceTeam.Gradience) to make use of them.
 - [LatencyFleX](https://github.com/ishitatsuyuki/LatencyFleX), [vkBasalt](https://github.com/DadSchoorse/vkBasalt), [MangoHud](https://github.com/flightlessmango/Mangohud), and [OBS VkCapture](https://github.com/nowrep/obs-vkcapture) installed and available by default
 - Support for [Wallpaper Engine](https://www.wallpaperengine.io/en). <sub><sup>(Only on KDE)</sup></sub>
 - [ROM Properties Page shell extension](https://github.com/GerbilSoft/rom-properties) included.
 - Full support for [Winesync/Fastsync/NTsync](https://github.com/Frogging-Family/wine-tkg-git/issues/936).
 - [Distrobox](https://github.com/89luca89/distrobox) preinstalled with automatic updates for created containers.
+- [Prompt Terminal](https://gitlab.gnome.org/chergert/prompt) used as the default in all images. This terminal is specifically designed for the container workflow you'll use in Bazzite. If you wish to return to stock, run `ujust restore-original-terminal`
 - Automated `duperemove` and `rmlint` services for reducing the disk space used by wine prefix contents.
 - Support for HDMI CEC via [libCEC](https://libcec.pulse-eight.com/).
 - [System76-Scheduler](https://github.com/pop-os/system76-scheduler) preinstalled, providing automatic process priority tweaks to your focused application and keeping CPU time for background processes to a minimum.
@@ -94,6 +101,7 @@ Variant designed for usage as an alternative to SteamOS on the Steam Deck, and f
 - **Able to be booted even if the drive is full.**
 - **Support for every language supported by upstream Fedora.**
 - **Uses Wayland on the desktop with [support for Steam input](https://github.com/Supreeeme/extest).**
+- Includes [HHD](https://github.com/hhd-dev/hhd) and [HandyGCCS](https://github.com/ShadowBlip/HandyGCCS) for expanded input support on non-Valve handhelds. 
 - Features ported versions of most SteamOS packages, including drivers, firmware updaters, and fan controllers [from the evlaV repository](https://gitlab.com/evlaV).
 - Patched Mesa for proper framerate control from Gamescope.
 - Comes with patches from [SteamOS BTRFS](https://gitlab.com/popsulfr/steamos-btrfs) for full BTRFS support for the SD card by default.
@@ -136,7 +144,6 @@ Builds with the GNOME desktop environment are available in both desktop and deck
 - [Variable refresh rate support and fractional scaling enabled under Wayland](https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154).
 - Custom menu in the top bar for returning to game mode, launching Steam, and opening a number of useful utilities.
 - [GSConnect](https://extensions.gnome.org/extension/1319/gsconnect/) preinstalled and ready to use.
-- Features optional Valve-inspired themes matching Vapor and VGUI2 from SteamOS.
 - [Hanabi extension](https://github.com/jeffshee/gnome-ext-hanabi) included to offer similar features to Wallpaper Engine in KDE.
 - Numerous optional extensions pre-installed, including [important user experience fixes](https://www.youtube.com/watch?v=nbCg9_YgKgM).
 - Automatic updates for the [Firefox GNOME theme](https://github.com/rafaelmardojai/firefox-gnome-theme) and [Thunderbird GNOME theme](https://github.com/rafaelmardojai/thunderbird-gnome-theme). <sup><sub>(If installed)</sub></sup>
@@ -317,6 +324,7 @@ sudo mokutil --import secure_boot_key.der
 Bazzite is a community effort and wouldn't exist without everyone's support. Below are some of the people who've helped us along the way:
   
 - [rei.svg](https://github.com/reisvg) - For creating our logo and overall branding.
+- [SuperRiderTH](https://github.com/SuperRiderTH) - For creating our Steam game mode startup video.
 - [evlaV](https://gitlab.com/evlaV) - For making Valve's code available and for being [this person](https://xkcd.com/2347/).
 - [ChimeraOS](https://chimeraos.org/) - For gamescope-session and for valuable support along the way.
 - [Jovian-NixOS](https://github.com/Jovian-Experiments) - For supporting us with technical issues and for creating a similar project. Seriously, go check it out. It's our Nix-based cousin.
