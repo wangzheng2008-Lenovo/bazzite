@@ -168,11 +168,7 @@ RUN rpm-ostree override replace \
         bluez-cups \
         bluez-libs \
         bluez-obexd \
-        xorg-x11-server-Xwayland && \
-    rpm-ostree override replace \
-    --experimental \
-    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        power-profiles-daemon
+        xorg-x11-server-Xwayland
 
 # Remove unneeded packages
 RUN rpm-ostree override remove \
