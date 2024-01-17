@@ -4,21 +4,24 @@
 
 [![build-bazzite](https://github.com/ublue-os/bazzite/actions/workflows/build.yml/badge.svg)](https://github.com/ublue-os/bazzite/actions/workflows/build.yml)
 
+# [🇺🇸](https://github.com/ublue-os/bazzite/blob/main/README.md) [🇪🇸](https://github.com/ublue-os/bazzite/blob/main/README-SPA.md) [🇮🇩](https://github.com/ublue-os/bazzite/blob/main/README-ID.md)
+
 ---
+
 # Daftar Isi
-- [Fitur untuk **SEMUA** Image Bazzite](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#tentang--fitur)
-  - [Fitur untuk Image **Desktop** ](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#desktop)
-  - [Fitur untuk Image **Steam Deck / HTPC**](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#steam-deckhome-theater-pcs-htpcs)
-  - [Fitur untuk Image **GNOME** ](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#gnome)
-  - [Fitur dari upstream](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#fitur-dari-upstream)
-- [Alasan](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#alasan)
-- [Pameran](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#pameran)
-- [Dokumentasi & Buletin](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#dokumentasi--buletin)
-- [Paket Kustom](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#paket-kustom)
-- [Verifikasi & Metrik](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#paket-kustom)
-- [Ucapan Terimakasih](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#ucapan-terimakasih)
-- [Membuat Image Anda Sendiri](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#membuat-image-anda-sendiri)
-- [Komunitas](https://github.com/ublue-os/bazzite/blob/main/README-ID.md#bergabung-dengan-komunitas)
+- [Fitur untuk **SEMUA** Image Bazzite](#tentang--fitur)
+  - [Fitur untuk Image **Desktop** ](#desktop)
+  - [Fitur untuk Image **Steam Deck / HTPC**](#steam-deckhome-theater-pcs-htpcs)
+  - [Fitur untuk Image **GNOME** ](#gnome)
+  - [Fitur dari upstream](#fitur-dari-upstream)
+- [Alasan](#alasan)
+- [Pameran](#pameran)
+- [Dokumentasi & Buletin](#dokumentasi--buletin)
+- [Paket Kustom](#paket-kustom)
+- [Verifikasi & Metrik](#paket-kustom)
+- [Ucapan Terimakasih](#ucapan-terimakasih)
+- [Membuat Image Anda Sendiri](#membuat-image-anda-sendiri)
+- [Komunitas](#bergabung-dengan-komunitas)
 ---
 
 ## Tentang & Fitur
@@ -289,11 +292,12 @@ cosign verify --key cosign.pub ghcr.io/ublue-os/bazzite
 
 ## Secure Boot
 
-Secure boot didukung dengan key dari kami. Pub key dapat ditemukan di root repositori [ini](https://github.com/ublue-os/bazzite/blob/main/secure_boot_key.der).
+Secure boot didukung dengan key dari kami. Pub key dapat ditemukan di root repositori [ini](https://github.com/ublue-os/bazzite/blob/main/secure_boot.der).
 Jika anda ingin menenroll key ini sebelum instalasi, unduh key ini dan jalankan:
 
 ```bash
-sudo mokutil --import secure_boot_key.der
+sudo mokutil --timeout -1
+sudo mokutil --import secure_boot.der
 ```
 
 ### Metrik Kontribusi

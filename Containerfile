@@ -198,9 +198,9 @@ RUN rpm-ostree install \
         input-remapper \
         system76-scheduler \
         tuned \
+        tuned-ppd \
         tuned-utils \
         tuned-utils-systemtap \
-        tuned-ppd \
         tuned-gtk \
         tuned-profiles-compat \
         tuned-profiles-atomic \
@@ -240,6 +240,7 @@ RUN rpm-ostree install \
         gum \
         setools \
         redhat-lsb-core && \
+    sed -i 's@Name=tuned-gui@Name=TuneD Manager@g' /usr/share/applications/tuned-gui.desktop && \
     ln -s /usr/share/fonts/google-noto-sans-cjk-fonts /usr/share/fonts/noto-cjk && \
     wget https://raw.githubusercontent.com/KyleGospo/steam-proton-mf-wmv/master/installcab.py -O /usr/bin/installcab && \
     wget https://github.com/KyleGospo/steam-proton-mf-wmv/blob/master/install-mf-wmv.sh -O /usr/bin/install-mf-wmv && \
@@ -461,7 +462,6 @@ RUN /tmp/image-info.sh && \
     systemctl disable rpm-ostreed-automatic.timer && \
     systemctl enable ublue-update.timer && \
     systemctl enable gamescope-workaround.service && \
-    systemctl enable sunshine-workaround.service && \
     systemctl enable waydroid-workaround.service && \
     systemctl enable bazzite-hardware-setup.service && \
     systemctl enable tailscaled.service && \
