@@ -3,7 +3,7 @@
 alias upgrade := update
 
 # Update system, flatpaks, and containers all at once
-update
+update:
     /usr/bin/topgrade --config /usr/share/ublue-os/topgrade/topgrade.toml
 
 # Update device firmware
