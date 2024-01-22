@@ -25,8 +25,14 @@ fi
 
 # Configure autologin if Steam has been updated
 if [[ ! -f ${DESKTOP_AUTOLOGIN} && -f $HOME/.local/share/Steam/ubuntu12_32/steamui.so ]]; then
-  sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${DM_CONF}
-  sed -i 's/.*User=.*/User='${USER}'/g' ${DM_CONF}
+  if [[ ${BASE_IMAGE_NAME} =~ "kinoite" ]]; then
+    sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${DM_CONF}
+    sed -i 's/.*User=.*/User='${USER}'/g' ${DM_CONF}
+  elif [[ ${BASE_IMAGE_NAME} =~ "silverblue" ]]; then
+    echo "[daemon]\nTimedLoginEnable=true\nTimedLoginDelay=1\nTimedLogin=$USER" > ${DM_CONF}
+    mkdir -p $(dirname ${AUTOLOGIN_CONF})
+    echo "[User]\n#Session=gamescope-session.desktop\n#XSession=" > ${AUTOLOGIN_CONF}
+  fi
 elif [[ ${BASE_IMAGE_NAME} =~ "kinoite" ]]; then
   if ${DESKTOP_WAYLAND}; then
     sed -i 's/.*Session=.*/Session=plasma.desktop/g' ${DM_CONF}
