@@ -8,9 +8,14 @@ BASE_IMAGE_NAME=$(jq -r '."base-image-name"' < $IMAGE_INFO)
 USER=$(id -nu 1000)
 HOME=$(getent passwd $USER | cut -d: -f6)
 
-# SteamOS SDDM config
-SDDM_CONF='/etc/sddm.conf.d/steamos.conf'
-AUTOLOGIN_CONF='/etc/sddm.conf.d/zz-steamos-autologin.conf'
+# DM config
+if [[ ${BASE_IMAGE_NAME} = 'kinoite' ]]; then
+  DM_CONF='/etc/sddm.conf.d/steamos.conf'
+  AUTOLOGIN_CONF='/etc/sddm.conf.d/zz-steamos-autologin.conf'
+elif [[ ${BASE_IMAGE_NAME} = 'silverblue' ]]; then
+  DM_CONF="/etc/gdm/custom.conf"
+  AUTOLOGIN_CONF="/var/lib/AccountsService/users/$USER"
+fi
 DESKTOP_AUTOLOGIN='/etc/bazzite/desktop_autologin'
 
 # Avoid autologin conflict
@@ -20,18 +25,27 @@ fi
 
 # Configure autologin if Steam has been updated
 if [[ ! -f ${DESKTOP_AUTOLOGIN} && -f $HOME/.local/share/Steam/ubuntu12_32/steamui.so ]]; then
-  sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${SDDM_CONF}
+  sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${DM_CONF}
+  sed -i 's/.*User=.*/User='${USER}'/g' ${DM_CONF}
 elif [[ ${BASE_IMAGE_NAME} =~ "kinoite" ]]; then
   if ${DESKTOP_WAYLAND}; then
-    sed -i 's/.*Session=.*/Session=plasma.desktop/g' ${SDDM_CONF}
+    sed -i 's/.*Session=.*/Session=plasma.desktop/g' ${DM_CONF}
   else
-    sed -i 's/.*Session=.*/Session=plasmax11.desktop/g' ${SDDM_CONF}
+    sed -i 's/.*Session=.*/Session=plasmax11.desktop/g' ${DM_CONF}
   fi
+  sed -i 's/.*User=.*/User='${USER}'/g' ${DM_CONF}
 elif [[ ${BASE_IMAGE_NAME} =~ "silverblue" ]]; then
+  sed -i 's/.*TimedLoginEnable=.*/TimedLoginEnable=true/g' ${DM_CONF}
+  sed -i 's/.*TimedLoginDelay=.*/TimedLoginDelay=1/g' ${DM_CONF}
+  sed -i 's/.*TimedLogin=.*/TimedLogin='${USER}'/g' ${DM_CONF}
+  if [[ ! -f ${AUTOLOGIN_CONF} ]]; then
+    echo "[User]" > ${AUTOLOGIN_CONF}
+    echo "#Session=" >> ${AUTOLOGIN_CONF}
+    echo "#XSession=" >> ${AUTOLOGIN_CONF}
+  fi
   if ${DESKTOP_WAYLAND}; then
-    sed -i 's/.*Session=.*/Session=gnome-wayland.desktop/g' ${SDDM_CONF}
+    sed -i 's/.*Session=.*/Session=gnome-wayland.desktop/g' ${AUTOLOGIN_CONF}
   else
-    sed -i 's/.*Session=.*/Session=gnome-xorg.desktop/g' ${SDDM_CONF}
+    sed -i 's/.*XSession=.*/XSession=gnome-xorg.desktop/g' ${AUTOLOGIN_CONF}
   fi
 fi
-sed -i 's/.*User=.*/User='${USER}'/g' ${SDDM_CONF}

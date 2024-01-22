@@ -27,7 +27,7 @@ if [[ -f $HOME/.local/share/Steam/ubuntu12_32/steamui.so ]]; then
     sed -i "s/.*Session=.*/Session=gamescope-session.desktop/g" "$AUTOLOGIN_CONF"
     # gamescope session is a wayland session
     if ! ${DESKTOP_WAYLAND}; then
-      sed -i "s/.*XSession=.*/#XSession=/g" "$AUTOLOGIN_CONF"   
+      sed -i "s/.*XSession=.*/#XSession=/g" "$AUTOLOGIN_CONF"
     fi
     sudo -Eu $USER gnome-session-quit --logout --no-prompt
   fi
