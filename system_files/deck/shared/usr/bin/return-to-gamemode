@@ -1,24 +1,34 @@
 #!/usr/bin/bash
 
+source /etc/default/desktop-wayland
+
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 BASE_IMAGE_NAME=$(jq -r '."base-image-name"' < $IMAGE_INFO)
 
 USER=$(id -nu 1000)
 HOME=$(getent passwd $USER | cut -d: -f6)
 
-# SteamOS autologin SDDM config
-AUTOLOGIN_CONF='/etc/sddm.conf.d/zz-steamos-autologin.conf'
+# DM config
+if [[ ${BASE_IMAGE_NAME} = 'kinoite' ]]; then
+  AUTOLOGIN_CONF="/etc/sddm.conf.d/zz-steamos-autologin.conf"
+elif [[ ${BASE_IMAGE_NAME} = 'silverblue' ]]; then
+  AUTOLOGIN_CONF="/var/lib/AccountsService/users/$USER"
+fi
 
 # Configure autologin if Steam has been updated
 if [[ -f $HOME/.local/share/Steam/ubuntu12_32/steamui.so ]]; then
-  {
-    echo "[Autologin]"
-    echo "Session=gamescope-session.desktop"
-  } > "$AUTOLOGIN_CONF"
-fi
-
-if [[ $BASE_IMAGE_NAME = "kinoite" ]]; then
-  sudo -Eu $USER qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
-elif [[ $BASE_IMAGE_NAME = "silverblue" ]]; then
-  sudo -Eu $USER gnome-session-quit --logout --no-prompt
+  if [[ ${BASE_IMAGE_NAME} = 'kinoite' ]]; then
+    {
+      echo "[Autologin]"
+      echo "Session=gamescope-session.desktop"
+    } > "$AUTOLOGIN_CONF"
+    sudo -Eu $USER qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout
+  elif [[ ${BASE_IMAGE_NAME} = 'silverblue' ]]; then
+    sed -i "s/.*Session=.*/Session=gamescope-session.desktop/g" "$AUTOLOGIN_CONF"
+    # gamescope session is a wayland session
+    if ! ${DESKTOP_WAYLAND}; then
+      sed -i "s/.*XSession=.*/#XSession=/g" "$AUTOLOGIN_CONF"   
+    fi
+    sudo -Eu $USER gnome-session-quit --logout --no-prompt
+  fi
 fi
