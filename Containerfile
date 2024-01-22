@@ -530,8 +530,7 @@ RUN if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
 ; else \
     rpm-ostree install \
         steamdeck-gnome-presets \
-        gnome-shell-extension-caribou-blocker \
-        sddm && \
+        gnome-shell-extension-caribou-blocker && \
     wget https://raw.githubusercontent.com/doitsujin/dxvk/master/dxvk.conf -O /usr/etc/dxvk-example.conf \
 ; fi
 
@@ -643,10 +642,6 @@ RUN /tmp/image-info.sh && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_kylegospo-wallpaper-engine-kde-plugin.repo && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_hhd-dev-hhd.repo && \
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ycollet-audinux.repo && \
-    if grep -q "silverblue" <<< "${BASE_IMAGE_NAME}"; then \
-        systemctl disable gdm.service && \
-        systemctl enable sddm.service \
-    ; fi && \
     systemctl enable wireplumber-workaround.service && \
     systemctl enable bazzite-autologin.service && \
     systemctl enable wireplumber-sysconf.service && \
@@ -666,7 +661,9 @@ RUN /tmp/image-info.sh && \
     systemctl disable jupiter-controller-update.service && \
     systemctl disable ryzenadj.service && \
     systemctl disable batterylimit.service && \
-    rm -f /usr/etc/sddm.conf && \
+    if grep -q "kinoite" <<< "${BASE_IMAGE_NAME}"; then \
+      rm -f /usr/etc/sddm.conf \
+    ; fi && \
     rm -f /usr/etc/default/bazzite && \
     rm -rf \
         /tmp/* \
