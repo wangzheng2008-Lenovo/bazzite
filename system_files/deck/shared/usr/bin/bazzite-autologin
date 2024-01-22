@@ -38,6 +38,7 @@ elif [[ ${BASE_IMAGE_NAME} =~ "silverblue" ]]; then
   sed -i 's/.*TimedLoginEnable=.*/TimedLoginEnable=true/g' ${DM_CONF}
   sed -i 's/.*TimedLoginDelay=.*/TimedLoginDelay=1/g' ${DM_CONF}
   sed -i 's/.*TimedLogin=.*/TimedLogin='${USER}'/g' ${DM_CONF}
+  mkdir -p $(dirname ${AUTOLOGIN_CONF})
   if [[ ! -f ${AUTOLOGIN_CONF} ]]; then
     echo "[User]" > ${AUTOLOGIN_CONF}
     echo "#Session=" >> ${AUTOLOGIN_CONF}
