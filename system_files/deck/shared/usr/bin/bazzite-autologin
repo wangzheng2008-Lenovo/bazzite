@@ -29,9 +29,9 @@ if [[ ! -f ${DESKTOP_AUTOLOGIN} && -f $HOME/.local/share/Steam/ubuntu12_32/steam
     sed -i 's/.*Session=.*/Session=gamescope-session.desktop/g' ${DM_CONF}
     sed -i 's/.*User=.*/User='${USER}'/g' ${DM_CONF}
   elif [[ ${BASE_IMAGE_NAME} =~ "silverblue" ]]; then
-    echo "[daemon]\nTimedLoginEnable=true\nTimedLoginDelay=1\nTimedLogin=$USER" > ${DM_CONF}
+    echo -e "[daemon]\nTimedLoginEnable=true\nTimedLoginDelay=1\nTimedLogin=$USER" > ${DM_CONF}
     mkdir -p $(dirname ${AUTOLOGIN_CONF})
-    echo "[User]\n#Session=gamescope-session.desktop\n#XSession=" > ${AUTOLOGIN_CONF}
+    echo -e "[User]\n#Session=gamescope-session.desktop\n#XSession=" > ${AUTOLOGIN_CONF}
   fi
 elif [[ ${BASE_IMAGE_NAME} =~ "kinoite" ]]; then
   if ${DESKTOP_WAYLAND}; then
@@ -41,9 +41,9 @@ elif [[ ${BASE_IMAGE_NAME} =~ "kinoite" ]]; then
   fi
   sed -i 's/.*User=.*/User='${USER}'/g' ${DM_CONF}
 elif [[ ${BASE_IMAGE_NAME} =~ "silverblue" ]]; then
-  echo "[daemon]\nTimedLoginEnable=true\nTimedLoginDelay=1\nTimedLogin=$USER" > ${DM_CONF}
+  echo -e "[daemon]\nTimedLoginEnable=true\nTimedLoginDelay=1\nTimedLogin=$USER" > ${DM_CONF}
   mkdir -p $(dirname ${AUTOLOGIN_CONF})
-  echo "[User]\n#Session=\n#XSession=" > ${AUTOLOGIN_CONF}
+  echo -e "[User]\n#Session=\n#XSession=" > ${AUTOLOGIN_CONF}
   if ${DESKTOP_WAYLAND}; then
     sed -i 's/.*Session=.*/Session=gnome-wayland.desktop/g' ${AUTOLOGIN_CONF}
   else
