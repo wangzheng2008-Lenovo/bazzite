@@ -82,7 +82,7 @@ COPY --from=ghcr.io/ublue-os/akmods:${AKMODS_FLAVOR}-${FEDORA_MAJOR_VERSION} /rp
 RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo && \
     wget https://negativo17.org/repos/fedora-multimedia.repo -O /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
     rpm-ostree install \
-        /tmp/akmods-rpms/kmods/*xpadneo*.rpm \
+        /tmp/akmods-rpms/kmods/*xone*.rpm \
         /tmp/akmods-rpms/kmods/*openrazer*.rpm \
         /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
         /tmp/akmods-rpms/kmods/*wl*.rpm \
@@ -92,11 +92,10 @@ RUN sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-akmods.repo
         /tmp/akmods-rpms/kmods/*zenergy*.rpm \
         /tmp/akmods-rpms/kmods/*ayn-platform*.rpm \
         /tmp/akmods-rpms/kmods/*bmi260*.rpm \
+        /tmp/akmods-rpms/kmods/*bmi323*.rpm \
         /tmp/akmods-rpms/kmods/*rtl88xxau*.rpm \
         /tmp/akmods-rpms/kmods/*ryzen-smu*.rpm && \
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo && \
-    rpm-ostree install \
-        /tmp/akmods-rpms/kmods/*xone*.rpm
+    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
 
 # Update packages that commonly cause build issues
 RUN rpm-ostree override replace \
@@ -158,12 +157,26 @@ RUN rpm-ostree override replace \
     --from repo=updates \
         libtirpc \
         || true && \
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=updates \
+        libuuid \
+        || true && \
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=updates \
+        libblkid \
+        || true && \
+    rpm-ostree override replace \
+    --experimental \
+    --from repo=updates \
+        libmount \
+        || true && \
     rpm-ostree override remove \
         glibc32 \
         || true
 
 # Install Valve's patched Mesa, Pipewire and Bluez
-# Install ublue patched power-profiles-daemon and fontconfig
 RUN rpm-ostree override replace \
     --experimental \
     --from repo=copr:copr.fedorainfracloud.org:kylegospo:bazzite-multilib \
@@ -187,11 +200,7 @@ RUN rpm-ostree override replace \
         bluez-cups \
         bluez-libs \
         bluez-obexd \
-        xorg-x11-server-Xwayland && \
-    rpm-ostree override replace \
-    --experimental \
-    --from repo=copr:copr.fedorainfracloud.org:ublue-os:staging \
-        fontconfig
+        xorg-x11-server-Xwayland
 
 # Remove unneeded packages
 RUN rpm-ostree override remove \
@@ -223,7 +232,6 @@ RUN rpm-ostree install \
         tuned-ppd \
         tuned-utils \
         tuned-utils-systemtap \
-        tuned-gtk \
         tuned-profiles-atomic \
         tuned-profiles-cpu-partitioning \
         powertop \
@@ -269,7 +277,6 @@ RUN rpm-ostree install \
     sed -i 's/max_cpu_load_percent.*/max_cpu_load_percent = 100.0/' /usr/etc/ublue-update/ublue-update.toml && \
     sed -i 's/max_mem_percent.*/max_mem_percent = 90.0/' /usr/etc/ublue-update/ublue-update.toml && \
     sed -i 's/dbus_notify.*/dbus_notify = false/' /usr/etc/ublue-update/ublue-update.toml && \
-    sed -i 's@Name=tuned-gui@Name=TuneD Manager@g' /usr/share/applications/tuned-gui.desktop && \
     ln -s /usr/share/fonts/google-noto-sans-cjk-fonts /usr/share/fonts/noto-cjk && \
     wget https://raw.githubusercontent.com/KyleGospo/steam-proton-mf-wmv/master/installcab.py -O /usr/bin/installcab && \
     wget https://github.com/KyleGospo/steam-proton-mf-wmv/blob/master/install-mf-wmv.sh -O /usr/bin/install-mf-wmv && \
@@ -440,6 +447,7 @@ RUN rpm-ostree install \
 # Cleanup & Finalize
 COPY system_files/shared /
 RUN /tmp/image-info.sh && \
+    glow -s /tmp/motd/dark.json /tmp/motd/bazzite.md > /usr/share/ublue-os/user-motd && \
     rm -f /etc/profile.d/toolbox.sh && \
     sed -i 's@/usr/bin/steam@/usr/bin/bazzite-steam@g' /usr/share/applications/steam.desktop && \
     sed -i 's@\[Desktop Entry\]@\[Desktop Entry\]\nNoDisplay=true@g' /usr/share/applications/shredder.desktop && \
